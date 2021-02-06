@@ -91,4 +91,41 @@ secondCardPromise
         })
 })
 
+let cardStack = document.getElementById("cards");
+let thirdCardPromise = axios.get(card_url);
+let count = 0;
 
+
+document.getElementById("hitme").onclick = function() {
+
+if (count < 1) {
+    thirdCardPromise
+    .then(data => {
+        let img = document.createElement("img");
+        currCardImage = data.data.cards[0].image
+        img.src = currCardImage
+        cardStack.appendChild(img)
+        count = 1;
+    })
+    
+}
+else {
+thirdCardPromise
+.then(data => {
+    if (data.data.remaining >= 0){
+        nextCardUrl = `https://deckofcardsapi.com/api/deck/${data.data.deck_id}/draw/?count=1`
+        return axios.get(nextCardUrl)
+        .then(data2 => {
+            let img = document.createElement("img");
+            currCardImage = data2.data.cards[0].image
+            img.src = currCardImage
+            cardStack.appendChild(img)
+        })
+
+    }
+
+})
+
+}
+
+}
